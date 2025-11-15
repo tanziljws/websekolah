@@ -82,17 +82,29 @@ class DatabaseSeeder extends Seeder
             Galery::create($galery);
         }
 
-        // Seed Foto
-        $fotos = [
-            [
-                'galery_id' => 1,
-                'file' => 'welcome.jpg'
-            ],
-            [
-                'galery_id' => 2,
-                'file' => 'activity1.jpg'
-            ]
-        ];
+        // Seed Foto (skip jika file tidak ada, karena seeder hanya untuk development)
+        // File foto sebaiknya di-upload melalui admin panel
+        $fotos = [];
+        
+        // Cek jika file hero ada, gunakan file hero yang tersedia
+        $heroPath = storage_path('app/public/hero');
+        if (is_dir($heroPath)) {
+            $heroFiles = glob($heroPath . '/*.{jpg,jpeg,png,JPG,JPEG,PNG}', GLOB_BRACE);
+            if (!empty($heroFiles)) {
+                $fotos = [
+                    [
+                        'galery_id' => 1,
+                        'file' => 'hero/' . basename($heroFiles[0])
+                    ]
+                ];
+                if (isset($heroFiles[1])) {
+                    $fotos[] = [
+                        'galery_id' => 2,
+                        'file' => 'hero/' . basename($heroFiles[1])
+                    ];
+                }
+            }
+        }
 
         foreach ($fotos as $foto) {
             Foto::create($foto);
