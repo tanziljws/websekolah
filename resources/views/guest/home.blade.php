@@ -483,60 +483,102 @@
                             $logoFile = 'tpfl.png';
                         }
                     @endphp
-                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program{{ $index + 1 }}">
-                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
+                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex" style="grid-area: program{{ $index + 1 }}">
+                        <!-- Logo Section - Left Side (Full Height) -->
+                        <div class="w-48 md:w-56 lg:w-64 flex-shrink-0 flex items-center justify-center bg-gray-50 p-6">
                             @if($logoFile)
-                                <img src="{{ asset('storage/jurusan/' . $logoFile) }}" alt="{{ $item->title ?? 'Program Keahlian' }}" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
+                                <img src="{{ asset('storage/jurusan/' . $logoFile) }}" alt="{{ $item->title ?? 'Program Keahlian' }}" class="w-full h-full max-h-40 md:max-h-48 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\'%3E%3Crect fill=\'%23ec4899\' width=\'64\' height=\'64\'/%3E%3C/svg%3E';">
                             @else
-                                <svg class="w-7 h-7 text-pink-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                                </svg>
+                                <div class="w-24 h-24 bg-pink-primary rounded-xl flex items-center justify-center">
+                                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                    </svg>
+                                </div>
                             @endif
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $item->title ?? 'Program Keahlian' }}</h3>
-                        <p class="text-gray-600 text-sm mb-3">{{ $item->content ?? '' }}</p>
-                        @if($item->meta && isset($item->meta['badge']))
-                            <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">{{ $item->meta['badge'] }}</span>
-                        @else
-                            <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
-                        @endif
+                        <!-- Content Section - Right Side -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $item->title ?? 'Program Keahlian' }}</h3>
+                                <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ $item->content ?? '' }}</p>
+                            </div>
+                            <div>
+                                @if($item->meta && isset($item->meta['badge']))
+                                    <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">{{ $item->meta['badge'] }}</span>
+                                @else
+                                    <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     @endforeach
                 @else
-                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program1">
-                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
-                            <img src="{{ asset('storage/jurusan/tjkt.png') }}" alt="TJKT" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
+                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex" style="grid-area: program1">
+                        <!-- Logo Section - Left Side (Full Height) -->
+                        <div class="w-48 md:w-56 lg:w-64 flex-shrink-0 flex items-center justify-center bg-gray-50 p-6">
+                            <img src="{{ asset('storage/jurusan/tjkt.png') }}" alt="TJKT" class="w-full h-full max-h-40 md:max-h-48 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\'%3E%3Crect fill=\'%23ec4899\' width=\'64\' height=\'64\'/%3E%3C/svg%3E';">
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Komputer & Jaringan</h3>
-                        <p class="text-gray-600 text-sm mb-3">Teknologi komputer, jaringan, dan IoT dengan kerjasama Samsung</p>
-                        <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                        <!-- Content Section - Right Side -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Komputer & Jaringan</h3>
+                                <p class="text-gray-600 text-sm mb-3 line-clamp-2">Teknologi komputer, jaringan, dan IoT dengan kerjasama Samsung</p>
+                            </div>
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program2">
-                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
-                            <img src="{{ asset('storage/jurusan/PPLG.png') }}" alt="PPLG" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
+                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex" style="grid-area: program2">
+                        <!-- Logo Section - Left Side (Full Height) -->
+                        <div class="w-48 md:w-56 lg:w-64 flex-shrink-0 flex items-center justify-center bg-gray-50 p-6">
+                            <img src="{{ asset('storage/jurusan/PPLG.png') }}" alt="PPLG" class="w-full h-full max-h-40 md:max-h-48 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\'%3E%3Crect fill=\'%23ec4899\' width=\'64\' height=\'64\'/%3E%3C/svg%3E';">
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Rekayasa Perangkat Lunak</h3>
-                        <p class="text-gray-600 text-sm mb-3">Pengembangan aplikasi dengan kerjasama Axio & Telkom</p>
-                        <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                        <!-- Content Section - Right Side -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Rekayasa Perangkat Lunak</h3>
+                                <p class="text-gray-600 text-sm mb-3 line-clamp-2">Pengembangan aplikasi dengan kerjasama Axio & Telkom</p>
+                            </div>
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program3">
-                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
-                            <img src="{{ asset('storage/jurusan/TO.png') }}" alt="TO" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
+                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex" style="grid-area: program3">
+                        <!-- Logo Section - Left Side (Full Height) -->
+                        <div class="w-48 md:w-56 lg:w-64 flex-shrink-0 flex items-center justify-center bg-gray-50 p-6">
+                            <img src="{{ asset('storage/jurusan/TO.png') }}" alt="TO" class="w-full h-full max-h-40 md:max-h-48 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\'%3E%3Crect fill=\'%23ec4899\' width=\'64\' height=\'64\'/%3E%3C/svg%3E';">
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Kendaraan Ringan</h3>
-                        <p class="text-gray-600 text-sm mb-3">Teknologi otomotif dengan kurikulum standar PT Honda</p>
-                        <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                        <!-- Content Section - Right Side -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Kendaraan Ringan</h3>
+                                <p class="text-gray-600 text-sm mb-3 line-clamp-2">Teknologi otomotif dengan kurikulum standar PT Honda</p>
+                            </div>
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program4">
-                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
-                            <img src="{{ asset('storage/jurusan/tpfl.png') }}" alt="TPFL" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
+                    <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex" style="grid-area: program4">
+                        <!-- Logo Section - Left Side (Full Height) -->
+                        <div class="w-48 md:w-56 lg:w-64 flex-shrink-0 flex items-center justify-center bg-gray-50 p-6">
+                            <img src="{{ asset('storage/jurusan/tpfl.png') }}" alt="TPFL" class="w-full h-full max-h-40 md:max-h-48 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\'%3E%3Crect fill=\'%23ec4899\' width=\'64\' height=\'64\'/%3E%3C/svg%3E';">
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Fabrikasi Logam</h3>
-                        <p class="text-gray-600 text-sm mb-3">Manufaktur dengan program pelatihan Komatsu "Takumi"</p>
-                        <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                        <!-- Content Section - Right Side -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Fabrikasi Logam</h3>
+                                <p class="text-gray-600 text-sm mb-3 line-clamp-2">Manufaktur dengan program pelatihan Komatsu "Takumi"</p>
+                            </div>
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-pink-50 text-pink-primary rounded-full text-xs font-medium">Kelas Industri</span>
+                            </div>
+                        </div>
                     </div>
                 @endif
                 
