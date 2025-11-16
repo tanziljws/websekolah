@@ -18,6 +18,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+# Note: storage/app/public/jurusan/ folder is NOT ignored - keep jurusan logos in git
 /vendor
 Homestead.json
 Homestead.yaml

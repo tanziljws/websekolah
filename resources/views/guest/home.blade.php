@@ -468,11 +468,30 @@
                 <!-- Program Keahlian Cards -->
                 @if($programs && $programs->count() > 0)
                     @foreach($programs->take(4) as $index => $item)
+                    @php
+                        // Mapping nama jurusan ke file logo
+                        $title = strtolower($item->title ?? '');
+                        $logoFile = null;
+                        
+                        if (str_contains($title, 'komputer') || str_contains($title, 'jaringan') || str_contains($title, 'tjkt')) {
+                            $logoFile = 'tjkt.png';
+                        } elseif (str_contains($title, 'rekayasa') || str_contains($title, 'perangkat lunak') || str_contains($title, 'pplg')) {
+                            $logoFile = 'PPLG.png';
+                        } elseif (str_contains($title, 'kendaraan') || str_contains($title, 'otomotif') || str_contains($title, 'to')) {
+                            $logoFile = 'TO.png';
+                        } elseif (str_contains($title, 'fabrikasi') || str_contains($title, 'logam') || str_contains($title, 'tpfl')) {
+                            $logoFile = 'tpfl.png';
+                        }
+                    @endphp
                     <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program{{ $index + 1 }}">
-                        <div class="w-14 h-14 bg-pink-primary rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                            </svg>
+                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
+                            @if($logoFile)
+                                <img src="{{ asset('storage/jurusan/' . $logoFile) }}" alt="{{ $item->title ?? 'Program Keahlian' }}" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
+                            @else
+                                <svg class="w-7 h-7 text-pink-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                </svg>
+                            @endif
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $item->title ?? 'Program Keahlian' }}</h3>
                         <p class="text-gray-600 text-sm mb-3">{{ $item->content ?? '' }}</p>
@@ -485,10 +504,8 @@
                     @endforeach
                 @else
                     <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program1">
-                        <div class="w-14 h-14 bg-pink-primary rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                            </svg>
+                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
+                            <img src="{{ asset('storage/jurusan/tjkt.png') }}" alt="TJKT" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Komputer & Jaringan</h3>
                         <p class="text-gray-600 text-sm mb-3">Teknologi komputer, jaringan, dan IoT dengan kerjasama Samsung</p>
@@ -496,10 +513,8 @@
                     </div>
                     
                     <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program2">
-                        <div class="w-14 h-14 bg-pink-primary rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                            </svg>
+                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
+                            <img src="{{ asset('storage/jurusan/PPLG.png') }}" alt="PPLG" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">Rekayasa Perangkat Lunak</h3>
                         <p class="text-gray-600 text-sm mb-3">Pengembangan aplikasi dengan kerjasama Axio & Telkom</p>
@@ -507,10 +522,8 @@
                     </div>
                     
                     <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program3">
-                        <div class="w-14 h-14 bg-pink-primary rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                            </svg>
+                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
+                            <img src="{{ asset('storage/jurusan/TO.png') }}" alt="TO" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Kendaraan Ringan</h3>
                         <p class="text-gray-600 text-sm mb-3">Teknologi otomotif dengan kurikulum standar PT Honda</p>
@@ -518,10 +531,8 @@
                     </div>
                     
                     <div class="bento-program-item bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:scale-105" style="grid-area: program4">
-                        <div class="w-14 h-14 bg-pink-primary rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
+                        <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-200 overflow-hidden">
+                            <img src="{{ asset('storage/jurusan/tpfl.png') }}" alt="TPFL" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect fill=\'%23ec4899\' width=\'56\' height=\'56\'/%3E%3C/svg%3E';">
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">Teknik Fabrikasi Logam</h3>
                         <p class="text-gray-600 text-sm mb-3">Manufaktur dengan program pelatihan Komatsu "Takumi"</p>
