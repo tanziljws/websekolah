@@ -259,7 +259,23 @@ class GuestController extends Controller
             ->take(6)
             ->get();
 
-        return view('guest.galeri_show', compact('galery', 'recommendations'));
+        // Check if user has bookmarked this gallery
+        $isBookmarked = false;
+        if (auth('user')->check()) {
+            $isBookmarked = $galery->bookmarks()
+                ->where('user_id', auth('user')->id())
+                ->exists();
+        }
+
+        // Check if user has liked this gallery
+        $isLiked = false;
+        if (auth('user')->check()) {
+            $isLiked = $galery->likes()
+                ->where('user_id', auth('user')->id())
+                ->exists();
+        }
+
+        return view('guest.galeri_show', compact('galery', 'recommendations', 'isBookmarked', 'isLiked'));
     }
 
     /**

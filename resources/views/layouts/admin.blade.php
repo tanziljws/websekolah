@@ -63,26 +63,56 @@
         nav::-webkit-scrollbar-thumb:hover {
             background: #d1d5db;
         }
+        
+        /* Sidebar Responsive Styles */
+        .sidebar-overlay {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        @media (max-width: 1023px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
     </style>
     
     @stack('styles')
 </head>
 <body class="bg-gray-100">
+    <!-- Mobile Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
+    
     <!-- Sidebar -->
     <div class="flex h-screen">
-        <aside class="w-64 bg-gradient-to-b from-white to-gray-50 shadow-xl border-r border-gray-200 relative">
+        <aside id="sidebar" class="sidebar fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50 shadow-xl border-r border-gray-200 relative h-screen overflow-y-auto">
             <!-- Logo & Header -->
             <div class="p-6 border-b border-gray-200 bg-white">
-                <div class="flex items-center space-x-3 mb-2">
-                    <div class="w-10 h-10 bg-pink-primary rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3 mb-2 flex-1">
+                        <div class="w-10 h-10 bg-pink-primary rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900">Admin Panel</h2>
+                            <p class="text-xs text-gray-500">SMKN 4 BOGOR</p>
+                        </div>
+                    </div>
+                    <!-- Close button for mobile -->
+                    <button id="close-sidebar" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-900">Admin Panel</h2>
-                        <p class="text-xs text-gray-500">SMKN 4 BOGOR</p>
-                    </div>
+                    </button>
                 </div>
             </div>
             
@@ -197,16 +227,23 @@
         </aside>
         
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
+        <main class="flex-1 overflow-y-auto lg:ml-0">
             <!-- Top Bar -->
-            <header class="bg-white shadow-md px-6 py-4">
+            <header class="bg-white shadow-md px-4 lg:px-6 py-4 sticky top-0 z-30">
                 <div class="flex justify-between items-center">
-                    <h1 class="text-2xl font-bold text-gray-900">@yield('page-title', 'Dashboard')</h1>
+                    <!-- Hamburger Menu Button for Mobile -->
+                    <button id="open-sidebar" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 mr-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <h1 class="text-xl lg:text-2xl font-bold text-gray-900">@yield('page-title', 'Dashboard')</h1>
+                    <div class="w-10"></div> <!-- Spacer for centering on mobile -->
                 </div>
             </header>
             
             <!-- Content -->
-            <div class="p-6">
+            <div class="p-4 lg:p-6">
                 @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
@@ -226,6 +263,55 @@
     
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        // Sidebar Toggle Functionality
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const openSidebarBtn = document.getElementById('open-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+        
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        // Event Listeners
+        if (openSidebarBtn) {
+            openSidebarBtn.addEventListener('click', openSidebar);
+        }
+        
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
+        
+        // Close sidebar when clicking on a link (mobile only)
+        const sidebarLinks = sidebar.querySelectorAll('a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                closeSidebar();
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

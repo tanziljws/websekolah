@@ -14,25 +14,40 @@
             
             <!-- Actions (Like, Bookmark, Share) -->
             @auth('user')
-            <div class="flex items-center space-x-4 mb-8">
+            <div class="flex items-center space-x-4 mb-8 flex-wrap gap-2">
                 <form action="{{ route('galleries.like', $galery) }}" method="POST" class="inline">
                     @csrf
-                    <button type="submit" class="flex items-center space-x-2 px-4 py-2 bg-pink-light rounded-lg hover:bg-pink-200 transition">
-                        <svg class="w-5 h-5 text-pink-primary" fill="currentColor" viewBox="0 0 20 20">
+                    <button type="submit" class="flex items-center space-x-2 px-4 py-2 {{ $isLiked ?? false ? 'bg-pink-primary text-white' : 'bg-pink-light text-pink-primary' }} rounded-lg hover:bg-pink-200 transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.834a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                         </svg>
-                        <span class="text-pink-primary font-medium">{{ $galery->total_likes ?? 0 }}</span>
+                        <span class="font-medium">{{ $galery->total_likes ?? 0 }}</span>
                     </button>
                 </form>
-                <form action="{{ route('galleries.bookmark', $galery) }}" method="POST" class="inline">
+                <form action="{{ route('galleries.bookmark', $galery) }}" method="POST" class="inline" id="bookmark-form">
                     @csrf
-                    <button type="submit" class="flex items-center space-x-2 px-4 py-2 bg-pink-light rounded-lg hover:bg-pink-200 transition">
-                        <svg class="w-5 h-5 text-pink-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="submit" class="flex items-center space-x-2 px-4 py-2 {{ ($isBookmarked ?? false) ? 'bg-pink-primary text-white' : 'bg-pink-light text-pink-primary' }} rounded-lg hover:bg-pink-200 transition">
+                        <svg class="w-5 h-5" fill="{{ ($isBookmarked ?? false) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                         </svg>
-                        <span class="text-pink-primary font-medium">Simpan</span>
+                        <span class="font-medium">{{ ($isBookmarked ?? false) ? 'Tersimpan' : 'Simpan' }}</span>
                     </button>
                 </form>
+                <button onclick="shareGallery()" class="flex items-center space-x-2 px-4 py-2 bg-pink-light text-pink-primary rounded-lg hover:bg-pink-200 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    <span class="font-medium">Bagikan</span>
+                </button>
+            </div>
+            @else
+            <div class="flex items-center space-x-4 mb-8 flex-wrap gap-2">
+                <button onclick="shareGallery()" class="flex items-center space-x-2 px-4 py-2 bg-pink-light text-pink-primary rounded-lg hover:bg-pink-200 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    <span class="font-medium">Bagikan</span>
+                </button>
             </div>
             @endauth
             
@@ -84,7 +99,20 @@
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
                                     <h4 class="font-bold text-gray-900">{{ $comment->user->name ?? 'User' }}</h4>
-                                    <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                        @if(auth('user')->check() && auth('user')->id() == $comment->user_id)
+                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus komentar ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-sm text-red-500 hover:text-red-700 transition">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
                                 </div>
                                 <p class="text-gray-700 mt-1">{{ $comment->body }}</p>
                                 
@@ -108,7 +136,20 @@
                                 <div class="ml-8 mt-3 border-l-2 border-pink-200 pl-3">
                                     <div class="flex items-center justify-between">
                                         <h5 class="font-medium text-gray-900">{{ $reply->user->name ?? 'User' }}</h5>
-                                        <span class="text-sm text-gray-500">{{ $reply->created_at->diffForHumans() }}</span>
+                                        <div class="flex items-center space-x-3">
+                                            <span class="text-sm text-gray-500">{{ $reply->created_at->diffForHumans() }}</span>
+                                            @if(auth('user')->check() && auth('user')->id() == $reply->user_id)
+                                            <form action="{{ route('comments.destroy', $reply) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus balasan ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-sm text-red-500 hover:text-red-700 transition">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            @endif
+                                        </div>
                                     </div>
                                     <p class="text-gray-700 mt-1">{{ $reply->body }}</p>
                                 </div>
@@ -161,5 +202,102 @@ function showReplyForm(commentId) {
 function hideReplyForm(commentId) {
     document.getElementById('reply-form-' + commentId).classList.add('hidden');
 }
+
+function shareGallery() {
+    const url = window.location.href;
+    const title = '{{ $galery->post->judul ?? "Galeri" }}';
+    const text = 'Lihat galeri ini: ' + title;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: text,
+            url: url
+        }).catch(err => {
+            console.log('Error sharing:', err);
+            copyToClipboard(url);
+        });
+    } else {
+        copyToClipboard(url);
+    }
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Link berhasil disalin ke clipboard!');
+        }).catch(err => {
+            fallbackCopyToClipboard(text);
+        });
+    } else {
+        fallbackCopyToClipboard(text);
+    }
+}
+
+function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        alert('Link berhasil disalin ke clipboard!');
+    } catch (err) {
+        console.error('Failed to copy:', err);
+        prompt('Salin link ini:', text);
+    }
+    document.body.removeChild(textArea);
+}
+
+// Update bookmark button after form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const bookmarkForm = document.getElementById('bookmark-form');
+    if (bookmarkForm) {
+        bookmarkForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            const button = form.querySelector('button[type="submit"]');
+            const svg = button.querySelector('svg');
+            const span = button.querySelector('span');
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || formData.get('_token')
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update bookmark state based on server response
+                if (data.is_bookmarked) {
+                    button.classList.remove('bg-pink-light', 'text-pink-primary');
+                    button.classList.add('bg-pink-primary', 'text-white');
+                    svg.setAttribute('fill', 'currentColor');
+                    span.textContent = 'Tersimpan';
+                } else {
+                    button.classList.remove('bg-pink-primary', 'text-white');
+                    button.classList.add('bg-pink-light', 'text-pink-primary');
+                    svg.setAttribute('fill', 'none');
+                    span.textContent = 'Simpan';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Fallback to normal form submission
+                form.submit();
+            });
+        });
+    }
+});
 </script>
 @endsection
