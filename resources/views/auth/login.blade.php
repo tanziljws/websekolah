@@ -3,11 +3,12 @@
 @section('title', 'Login Admin - SMKN 4 BOGOR')
 
 @section('content')
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-pink-50 py-12 px-4">
+<section class="min-h-screen flex items-center justify-center py-12 px-4 relative" style="background-image: url('{{ asset('storage/fotos/image.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="absolute inset-0 bg-black/50"></div>
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div class="absolute top-0 left-0 w-96 h-96 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
     </div>
     
     <div class="max-w-md w-full relative z-10">
@@ -19,8 +20,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">Admin Panel</h1>
-            <p class="text-gray-600">Masuk ke panel administrasi</p>
+            <h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">Admin Panel</h1>
+            <p class="text-white/95 drop-shadow-md">Masuk ke panel administrasi</p>
         </div>
         
         <!-- Login Card -->
@@ -130,7 +131,7 @@
         
         <!-- Back to Home -->
         <div class="mt-6 text-center">
-            <a href="{{ route('guest.home') }}" class="inline-flex items-center text-gray-600 hover:text-pink-primary transition-colors text-sm font-medium">
+            <a href="{{ route('guest.home') }}" class="inline-flex items-center text-white/90 hover:text-white transition-colors text-sm font-medium drop-shadow-md">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
