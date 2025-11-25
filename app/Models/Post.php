@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    use HasFactory;
+
+    protected $table = 'posts';
+    protected $fillable = ['judul', 'kategori_id', 'isi', 'petugas_id', 'status', 'galery_id', 'total_visitors'];
+    
+    protected $casts = [
+        'total_visitors' => 'integer',
+    ];
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
+
+    public function petugas()
+    {
+        return $this->belongsTo(Petugas::class);
+    }
+
+    public function galeries()
+    {
+        return $this->hasMany(Galery::class);
+    }
+
+    public function galery()
+    {
+        return $this->belongsTo(Galery::class);
+    }
+}
