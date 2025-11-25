@@ -251,6 +251,9 @@ class GuestController extends Controller
         // Pastikan hanya galeri aktif yang bisa ditampilkan
         abort_unless($galery->status == 1, 404);
 
+        // Increment visitor count untuk semua pengunjung (termasuk guest)
+        $galery->increment('total_visitors');
+
         $galery->load(['post', 'fotos', 'likes', 'bookmarks', 'comments.user', 'comments.children.user']);
         $recommendations = Galery::with('fotos')
             ->where('status', 1)
@@ -325,6 +328,9 @@ class GuestController extends Controller
         $agendaKategori = Kategori::where('judul', 'Agenda')->first();
         abort_unless($post->status === 'published' && $post->kategori_id == $agendaKategori->id, 404);
         
+        // Increment visitor count untuk semua pengunjung (termasuk guest)
+        $post->increment('total_visitors');
+        
         $post->load(['kategori', 'petugas', 'galery.fotos']);
         
         // Get related posts (posts lain dengan kategori Agenda)
@@ -385,6 +391,9 @@ class GuestController extends Controller
         // Pastikan post adalah kategori Informasi Terkini dan published
         $informasiKategori = Kategori::where('judul', 'Informasi Terkini')->first();
         abort_unless($post->status === 'published' && $post->kategori_id == $informasiKategori->id, 404);
+        
+        // Increment visitor count untuk semua pengunjung (termasuk guest)
+        $post->increment('total_visitors');
         
         $post->load(['kategori', 'petugas', 'galery.fotos']);
         
