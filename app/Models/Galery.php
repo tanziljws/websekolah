@@ -14,14 +14,13 @@ class Galery extends Model
     use HasFactory;
 
     protected $table = 'galery';
-    protected $fillable = ['post_id', 'position', 'status', 'total_likes', 'total_comments', 'total_bookmarks', 'total_downloads', 'total_visitors'];
+    protected $fillable = ['post_id', 'position', 'status', 'total_likes', 'total_comments', 'total_bookmarks', 'total_downloads'];
     
     protected $casts = [
         'total_likes' => 'integer',
         'total_comments' => 'integer',
         'total_bookmarks' => 'integer',
         'total_downloads' => 'integer',
-        'total_visitors' => 'integer',
     ];
 
     public function post()

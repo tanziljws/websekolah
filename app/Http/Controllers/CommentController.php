@@ -55,34 +55,14 @@ class CommentController extends Controller
     {
         $userId = auth('user')->id() ?? auth()->id();
         if (!$userId) {
-            if (request()->expectsJson()) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
             return redirect()->route('user.login');
         }
 
-        // Check if user owns the comment
-        if ($comment->user_id !== (int) $userId) {
-            if (request()->expectsJson()) {
-                return response()->json(['error' => 'Anda tidak memiliki izin untuk menghapus komentar ini.'], 403);
-            }
-            session()->flash('error', 'Anda tidak memiliki izin untuk menghapus komentar ini.');
-            return back();
+        if ($comment->user_id === (int) $userId) {
+            $comment->delete();
+            session()->flash('success', 'Komentar berhasil dihapus.');
         }
 
-        // Delete child comments first (if any)
-        if ($comment->children()->count() > 0) {
-            $comment->children()->delete();
-        }
-        
-        // Delete the comment (soft delete)
-        $comment->delete();
-        
-        if (request()->expectsJson()) {
-            return response()->json(['success' => true, 'message' => 'Komentar berhasil dihapus.']);
-        }
-        
-        session()->flash('success', 'Komentar berhasil dihapus.');
         return back();
     }
 }

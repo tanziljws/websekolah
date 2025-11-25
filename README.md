@@ -317,8 +317,15 @@ php artisan test --filter=UserTest
 
 ### **Railway Deployment**
 
-1. **Configure Railway:**
-   - Connect your repository to Railway
+1. **Push to GitHub:**
+   ```bash
+   git add .
+   git commit -m "Deploy to Railway"
+   git push origin main
+   ```
+
+2. **Configure Railway:**
+   - Connect your GitHub repository to Railway
    - Railway will auto-detect Laravel
    - Set environment variables in Railway dashboard:
      - `APP_ENV=production`
@@ -327,14 +334,14 @@ php artisan test --filter=UserTest
      - Database credentials
      - Mail credentials (Brevo)
 
-2. **Deployment Process:**
+3. **Deployment Process:**
    - Railway automatically runs `composer install`
    - Storage symlink is created automatically via `post-install-cmd`
    - `Procfile` ensures migrations and cache optimization
    - Hero images from `storage/app/public/hero/` are included in deployment
 
-3. **Important Notes:**
-   - Storage files (hero images, profiles, fotos) should be included in deployment
+4. **Important Notes:**
+   - Storage files (hero images, profiles, fotos) are committed to git
    - Symlink `/public/storage` is created automatically during build
    - If 404 errors occur for images, check that `php artisan storage:link` ran successfully
    - View Railway logs: `railway logs` or Railway dashboard

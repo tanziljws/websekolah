@@ -17,10 +17,6 @@ class CommentObserver
     public function deleted(Comment $comment): void
     {
         if ($comment->galery_id) {
-            // Decrement total comments for the comment itself
-            // Note: Child comments will be deleted separately in the controller,
-            // and their own deleted() observer will be called, so we only
-            // decrement for this comment
             Galery::where('id', $comment->galery_id)->where('total_comments', '>', 0)->decrement('total_comments');
         }
     }

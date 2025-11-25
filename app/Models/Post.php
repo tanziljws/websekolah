@@ -10,11 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $table = 'posts';
-    protected $fillable = ['judul', 'kategori_id', 'isi', 'petugas_id', 'status', 'galery_id', 'total_visitors'];
-    
-    protected $casts = [
-        'total_visitors' => 'integer',
-    ];
+    protected $fillable = ['judul', 'kategori_id', 'isi', 'petugas_id', 'status', 'galery_id'];
 
     public function kategori()
     {

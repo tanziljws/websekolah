@@ -9,16 +9,7 @@
             <!-- Header -->
             <div class="mb-8">
                 <a href="{{ route('guest.galeri') }}" class="text-pink-primary hover:text-pink-dark mb-4 inline-block">← Kembali ke Galeri</a>
-                <div class="flex items-center justify-between flex-wrap gap-4">
-                    <h1 class="text-4xl font-bold text-gray-900">{{ $galery->post->judul ?? 'Galeri' }}</h1>
-                    <div class="flex items-center space-x-2 text-gray-600">
-                        <svg class="w-5 h-5 text-pink-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        <span class="font-medium">{{ number_format($galery->total_visitors ?? 0) }} pengunjung</span>
-                    </div>
-                </div>
+                <h1 class="text-4xl font-bold text-gray-900">{{ $galery->post->judul ?? 'Galeri' }}</h1>
             </div>
             
             <!-- Actions (Like, Bookmark, Share) -->
@@ -111,10 +102,10 @@
                                     <div class="flex items-center space-x-3">
                                         <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
                                         @if(auth('user')->check() && auth('user')->id() == $comment->user_id)
-                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="inline delete-comment-form" onsubmit="return confirm('Apakah Anda yakin ingin menghapus komentar ini?');">
+                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus komentar ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded transition-all duration-200 group" title="Hapus komentar">
+                                            <button type="submit" class="text-sm text-red-500 hover:text-red-700 transition">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -148,10 +139,10 @@
                                         <div class="flex items-center space-x-3">
                                             <span class="text-sm text-gray-500">{{ $reply->created_at->diffForHumans() }}</span>
                                             @if(auth('user')->check() && auth('user')->id() == $reply->user_id)
-                                            <form action="{{ route('comments.destroy', $reply) }}" method="POST" class="inline delete-comment-form" onsubmit="return confirm('Apakah Anda yakin ingin menghapus balasan ini?');">
+                                            <form action="{{ route('comments.destroy', $reply) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus balasan ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded transition-all duration-200 group" title="Hapus balasan">
+                                                <button type="submit" class="text-sm text-red-500 hover:text-red-700 transition">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                     </svg>
@@ -307,95 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
-    // Handle comment deletion with AJAX
-    const deleteForms = document.querySelectorAll('.delete-comment-form');
-    deleteForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!confirm('Apakah Anda yakin ingin menghapus komentar ini?')) {
-                return;
-            }
-            
-            const form = this;
-            const formData = new FormData(form);
-            const button = form.querySelector('button[type="submit"]');
-            const commentContainer = form.closest('.border-b, .ml-8');
-            
-            // Disable button and show loading state
-            button.disabled = true;
-            button.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-            
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || formData.get('_token'),
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => {
-                        throw new Error(data.error || 'Gagal menghapus komentar');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Fade out animation
-                if (commentContainer) {
-                    commentContainer.style.transition = 'opacity 0.3s ease-out';
-                    commentContainer.style.opacity = '0';
-                    setTimeout(() => {
-                        commentContainer.remove();
-                        
-                        // Check if there are no more comments
-                        const commentsList = document.querySelector('.space-y-4');
-                        if (commentsList && commentsList.children.length === 0) {
-                            commentsList.innerHTML = '<p class="text-gray-600">Belum ada komentar. Jadilah yang pertama berkomentar!</p>';
-                        }
-                    }, 300);
-                }
-                
-                // Show success message
-                showNotification('Komentar berhasil dihapus', 'success');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                button.disabled = false;
-                button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                showNotification(error.message || 'Gagal menghapus komentar', 'error');
-                // Fallback to normal form submission
-                // form.submit();
-            });
-        });
-    });
 });
-
-// Notification function
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-    }`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 10);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 3000);
-}
 </script>
 @endsection
