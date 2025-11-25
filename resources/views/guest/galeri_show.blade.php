@@ -9,7 +9,17 @@
             <!-- Header -->
             <div class="mb-8">
                 <a href="{{ route('guest.galeri') }}" class="text-pink-primary hover:text-pink-dark mb-4 inline-block">← Kembali ke Galeri</a>
-                <h1 class="text-4xl font-bold text-gray-900">{{ $galery->post->judul ?? 'Galeri' }}</h1>
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <h1 class="text-4xl font-bold text-gray-900">{{ $galery->post->judul ?? 'Galeri' }}</h1>
+                    <div class="flex items-center space-x-2 bg-pink-50 px-4 py-2 rounded-full">
+                        <svg class="w-5 h-5 text-pink-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <span class="font-semibold text-pink-primary">{{ number_format($galery->total_visitors ?? 0) }}</span>
+                        <span class="text-gray-600">dilihat</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Actions (Like, Bookmark, Share) -->
